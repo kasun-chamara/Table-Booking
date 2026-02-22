@@ -3,6 +3,7 @@ import { IoPrint, IoCallOutline, IoEyeOutline, IoDocumentAttachOutline, IoTimeOu
 import { CiSearch, CiBoxList, CiViewTable } from "react-icons/ci";
 import theme from '../../../theme';
 import MOCK_DATA from '../../MockDb';
+import ReminderConfirmModal from '../CardComponents/ReminderCard/Index';
 
 const STATUS_CONFIG = {
   waitingList: { label: "Waiting List", bg: theme.status.waitingList, color: theme.text_light },
@@ -45,8 +46,8 @@ function ViewBtn({ id, Icon, label, currentView, darkMode, text, subtext, onSetV
 export default function BookingTable({ darkMode = false }) {
   const [view, setView]                   = useState("list");
   const [search, setSearch]               = useState("");
-  const [showCancelled, setShowCancelled] = useState(false);
   const [selected, setSelected]           = useState([]);
+  const [reminderOpen, setReminderOpen]   = useState(false);
 
   const palette  = darkMode ? theme.dark : theme;
   const bg       = palette.cardBg;
@@ -58,7 +59,6 @@ export default function BookingTable({ darkMode = false }) {
   const rowHover = palette.hoverBg || (darkMode ? "#1e2027" : "#f8faff");
 
   const filtered = MOCK_DATA.filter(r => {
-    if (!showCancelled && r.status === "cancelled") return false;
     return r.customer.toLowerCase().includes(search.toLowerCase());
   });
 
@@ -134,21 +134,31 @@ export default function BookingTable({ darkMode = false }) {
         padding: "10px 16px", borderBottom: `1px solid ${border}`,
       }}>
         <button
-          onClick={() => setShowCancelled(s => !s)}
           style={{
             padding: "6px 18px", borderRadius: 20, fontSize: 13, fontWeight: 600,
-            border: `2px solid #ef4444`, cursor: "pointer",
-            background: showCancelled ? "#ef4444" : "transparent",
-            color: showCancelled ? "#fff" : "#ef4444",
+            border: `1px solid #ef4444`, cursor: "pointer",
+            background: "transparent",
+            color: "#ef4444",
             transition: "all 0.15s",
           }}
         >Show Cancelled</button>
-        <button style={{
-          padding: "6px 18px", borderRadius: 20, fontSize: 13, fontWeight: 600,
-          border: `2px solid ${border}`, background: "transparent",
-          color: text, cursor: "pointer",
-        }}>Reminder</button>
+        <button
+          style={{
+            padding: "6px 18px", borderRadius: 20, fontSize: 13, fontWeight: 600,
+            border: `1px solid ${border}`, background: "transparent",
+            color: text, cursor: "pointer",
+          }}
+          onClick={() => setReminderOpen(true)}
+        >Reminder</button>
       </div>
+
+      {/* Reminder Modal */}
+      <ReminderConfirmModal
+        open={reminderOpen}
+        onClose={() => setReminderOpen(false)}
+        onConfirm={() => setReminderOpen(false)}
+        isDarkMode={darkMode}
+      />
 
       {/* ── Table ── */}
       <div style={{ overflowX: "auto" }}>

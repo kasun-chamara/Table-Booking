@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { HiOutlineBell } from "react-icons/hi";
 import { MdOutlineWbSunny, MdOutlineNightlight } from "react-icons/md";
 import { HiMenu } from "react-icons/hi";
+import NewBookingModal from "../CardComponents/NewBooking/Index";
 
 function IconBtn({ children, onClick, title, darkMode }) {
 	return (
@@ -31,6 +32,7 @@ export default function HeaderNav({
 	avatarSrc
 }) {
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
+	const [showNewBooking, setShowNewBooking] = useState(false);
 
 	return (
 		<>
@@ -73,7 +75,7 @@ export default function HeaderNav({
 						>
 							{subtitle}
 						</span>
-                        
+            
 					</div>
 				</div>
 
@@ -149,33 +151,34 @@ export default function HeaderNav({
 						</div>
 
 						<div className="hidden lg:flex gap-2 ml-4">
-							<button
-								className={`
-									px-4 py-1.5 rounded-lg font-semibold text-sm
-									transition-colors duration-200
-									${darkMode
-										? 'bg-[#FAFAFA] text-[#32363E] hover:bg-[#32363E] hover:text-[#FAFAFA]'
-										: 'bg-[#1F2129] text-white hover:bg-white hover:text-[#1F2129]'
-									}
-								`}
-							>
-								New Booking
-							</button>
-							<button
-								className={`
-									px-4 py-1.5 rounded-lg font-semibold text-sm border
-									transition-colors duration-200
-									${darkMode
-										? 'bg-[#32363E] text-[#FAFAFA] border-[#374151] hover:bg-[#FAFAFA] hover:text-[#32363E]'
-										: 'bg-white text-[#1F2129] border-[#e5e7eb] hover:bg-[#1F2129] hover:text-white'
-									}
-								`}
-							>
-								Close Booking
-							</button>
+							 <button
+									 className={`
+											 px-4 py-1.5 rounded-lg font-semibold text-sm
+											 transition-colors duration-200
+											 ${darkMode
+													 ? 'bg-[#FAFAFA] text-[#32363E] hover:bg-[#32363E] hover:text-[#FAFAFA]'
+													 : 'bg-[#1F2129] text-white hover:bg-white hover:text-[#1F2129]'
+											 }
+									 `}
+									 onClick={() => setShowNewBooking(true)}
+							 >
+									 New Booking
+							 </button>
+							 <button
+									 className={`
+											 px-4 py-1.5 rounded-lg font-semibold text-sm border
+											 transition-colors duration-200
+											 ${darkMode
+													 ? 'bg-[#32363E] text-[#FAFAFA] border-[#374151] hover:bg-[#FAFAFA] hover:text-[#32363E]'
+													 : 'bg-white text-[#1F2129] border-[#e5e7eb] hover:bg-[#1F2129] hover:text-white'
+											 }
+									 `}
+							 >
+									 Close Booking
+							 </button>
 						</div>
 					</div>
-                    
+          
 
 					<div
 						className={`flex md:hidden items-center gap-2 w-full justify-between px-2 py-2`}
@@ -183,10 +186,11 @@ export default function HeaderNav({
 					>
 						<button
 							className={`flex-1 px-4 py-2 rounded-lg font-semibold text-sm transition-colors duration-200 mr-2
-								${darkMode
-									? 'bg-[#FAFAFA] text-[#32363E] hover:bg-[#32363E] hover:text-[#FAFAFA]'
-									: 'bg-[#1F2129] text-white hover:bg-white hover:text-[#1F2129]'}
+									 ${darkMode
+												? 'bg-[#FAFAFA] text-[#32363E] hover:bg-[#32363E] hover:text-[#FAFAFA]'
+												: 'bg-[#1F2129] text-white hover:bg-white hover:text-[#1F2129]'}
 							`}
+							onClick={() => setShowNewBooking(true)}
 						>
 							New Booking
 						</button>
@@ -257,6 +261,15 @@ export default function HeaderNav({
 						</div>
 					</div>
 				</>
+			)}
+
+			{showNewBooking && (
+				<NewBookingModal
+					open={showNewBooking}
+					onClose={() => setShowNewBooking(false)}
+					darkMode={darkMode}
+					accentColor="#22c55e"
+				/>
 			)}
 		</>
 	);
