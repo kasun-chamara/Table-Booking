@@ -15,7 +15,7 @@ export default function TimeSlotBookingModal({
 
   const timeSlots = Array.from({ length: 42 }).map((_, i) => ({
     time: "08:00 AM",
-    available: ![0, 27, 28, 41].includes(i), // demo unavailable slots
+    available: ![0, 27, 28, 41].includes(i), 
   }));
 
   const palette = isDarkMode ? theme.dark : theme;

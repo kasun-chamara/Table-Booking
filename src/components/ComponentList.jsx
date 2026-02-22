@@ -5,6 +5,7 @@ import ReminderConfirmModal from "./CardComponents/ReminderCard/Index";
 import TimeSlotBookingModal from "./CardComponents/TimeSlot/Index";
 import TableCapacityCard from "./CardComponents/TableCard/Index";
 import SidebarNav from "./SidebarNav/Index";
+import HeaderNav from "./Header/Index";
 
 export default function ComponentList() {
   const [reminderModalOpen, setReminderModalOpen] = useState(false);
@@ -12,9 +13,7 @@ export default function ComponentList() {
 
   return (
     <>
-      {/* SidebarNav at top, fixed position */}
-      {/* <SidebarNav isDarkMode={true} /> */}
-      {/* Main content with left margin for sidebar */}
+      <HeaderNav title="Component Showcase" subtitle="Explore UI Components" />
       <div className="space-y-8" style={{ marginLeft: 64 }}>
         <BookingStatusList />
         <h3 className="text-xl font-bold text-center">   Open Modal</h3>

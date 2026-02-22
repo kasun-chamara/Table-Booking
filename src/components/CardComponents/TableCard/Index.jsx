@@ -3,13 +3,12 @@ import { MdTableRestaurant } from "react-icons/md";
 import theme from "../../../../theme";
 
 export default function TableCapacityCard({
-  tableNumbers = [2,3,5,6,], // can be array of numbers or array of {num, available}
+  tableNumbers = [2,3,5,6,], 
   min = 2,
   max = 2,
   isDarkMode = false,
 }) {
   const palette = isDarkMode ? theme.dark : theme;
-  // Normalize tableNumbers to array of {num, available}
   const normalizedTableNumbers = tableNumbers.map(t =>
     typeof t === 'object' && t !== null
       ? t
@@ -28,7 +27,6 @@ export default function TableCapacityCard({
       }}
     >
 
-      {/* Icon and table number row */}
       <div className="flex w-full">
         <div className="flex flex-col items-center justify-center min-w-[40px]">
           <div
@@ -67,7 +65,6 @@ export default function TableCapacityCard({
           ))}
         </div>
       </div>
-      {/* Min / Max below icon/number */}
       <div className="flex w-full justify-around text-center">
         <div>
           <p

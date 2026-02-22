@@ -28,7 +28,7 @@ const defaultStatusLabels = {
 const BookingStatusList = ({
 	statuses = defaultStatuses,
 	statusLabels = defaultStatusLabels,
-	isDarkMode = false,
+	isDarkMode =false,
 }) => {
 	const palette = isDarkMode ? theme.dark : theme;
 	return (

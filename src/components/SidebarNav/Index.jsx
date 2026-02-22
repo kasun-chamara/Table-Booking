@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { HiOutlineBell } from "react-icons/hi";
+import { MdOutlineWbSunny, MdOutlineNightlight } from "react-icons/md";
 import {
   HiOutlineHome,
   HiOutlineUsers,
@@ -17,31 +19,35 @@ import { MdGroup } from "react-icons/md";
 import { MdTimeline } from "react-icons/md";
 import { MdWidgets } from "react-icons/md";
 
-// ─── SidebarNav ───────────────────────────────────────────────────────────────
+
 export default function SidebarNav({
   activeId = "home",
   onNavigate,
   onLogout,
   theme: customTheme,
-  isDarkMode = false,
+  darkMode = false,
+  expanded,
+  setExpanded,
+  notificationCount = 0,
+  setDarkMode,
+  avatarSrc
 }) {
-  const [expanded, setExpanded] = useState(false);
   const [active, setActive] = useState(activeId);
   const [subMenuActive, setSubMenuActive] = useState(null);
 
-  // Use centralized theme file for palette
-  const palette = isDarkMode
+  const palette = darkMode
     ? (customTheme?.dark || theme.dark)
     : (customTheme || theme);
 
   const colors = {
-    bg:          palette.sidebar_bg ?? (isDarkMode ? "#1f2937" : "#ffffff"),
-    border:      palette.border     ?? palette.gray_700 ?? (isDarkMode ? "#374151" : "#e5e7eb"),
-    iconDefault: palette.gray_400   ?? (isDarkMode ? "#9ca3af" : "#6b7280"),
-    iconActive:  palette.primary    ?? (isDarkMode ? "#ffffff" : "#111827"),
-    activeBg:    palette.gray_300   ?? (isDarkMode ? "#374151" : "#e5e7eb"),
+    bg:          palette.sidebar_bg ?? (darkMode ? "#1f2937" : "#ffffff"),
+    cardBg:      palette.card_bg    ?? (darkMode ? "#32363E" : "#fff"),
+    border:      palette.border     ?? palette.gray_700 ?? (darkMode ? "#374151" : "#e5e7eb"),
+    iconDefault: palette.gray_400   ?? (darkMode ? "#9ca3af" : "#6b7280"),
+    iconActive:  palette.primary    ?? (darkMode ? "#ffffff" : "#111827"),
+    activeBg:    palette.gray_300   ?? (darkMode ? "#23272f" : "#e5e7eb"),
     logout:      palette.status?.noShow ?? "#ef4444",
-    text:        palette.foreground ?? (isDarkMode ? "#FAFAFA" : "#1F2129"),
+    text:        palette.foreground ?? (darkMode ? "#FAFAFA" : "#1F2129"),
   };
 
   const NAV_ITEMS = [
@@ -74,14 +80,12 @@ export default function SidebarNav({
     timeline:     "/timeline",
   };
 
-  // ✅ FIXED: now uses ROUTE_MAP to pass correct path
   const handleNav = (id) => {
     setActive(id);
     setSubMenuActive(null);
     onNavigate?.(ROUTE_MAP[id] ?? "/");
   };
 
-  // ✅ FIXED: now uses ROUTE_MAP to pass correct path
   const handleSubMenu = (id) => {
     setSubMenuActive(id);
     onNavigate?.(ROUTE_MAP[id] ?? "/");
@@ -95,7 +99,7 @@ export default function SidebarNav({
         width: expanded ? 200 : 64,
         transition: "width 0.25s ease",
         height: "calc(100vh - 32px)",
-        background: colors.bg,
+        background: colors.cardBg,
         border: `1px solid ${colors.border}`,
         padding: "16px 8px",
         position: "fixed",
@@ -190,7 +194,43 @@ export default function SidebarNav({
         ))}
       </div>
 
+
       <div style={{ height:1, background:colors.border, margin:"8px 0" }} />
+
+      <div className="flex md:hidden flex-col items-center gap-3 mt-4 mb-2">
+        <div className="relative">
+          <button
+            className={`bg-transparent border-none cursor-pointer flex items-center justify-center p-1 rounded-lg transition-opacity duration-150 hover:opacity-65 ${darkMode ? 'text-[#FAFAFA]' : 'text-[#1F2129]'}`}
+            title="Notifications"
+          >
+            <HiOutlineBell size={22} />
+          </button>
+          {notificationCount > 0 && (
+            <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[9px] font-bold rounded-full w-4 h-4 flex items-center justify-center pointer-events-none">
+              {notificationCount}
+            </span>
+          )}
+        </div>
+        <button
+          onClick={() => setDarkMode && setDarkMode(d => !d)}
+          title="Toggle theme"
+          className={`bg-transparent border-none cursor-pointer flex items-center justify-center p-1 rounded-lg transition-opacity duration-150 hover:opacity-65 ${darkMode ? 'text-[#FAFAFA]' : 'text-[#1F2129]'}`}
+        >
+          {darkMode ? <MdOutlineWbSunny size={22} /> : <MdOutlineNightlight size={22} />}
+        </button>
+        <div
+          className={`w-8 h-8 rounded-full overflow-hidden cursor-pointer flex items-center justify-center border ${darkMode ? 'border-[#374151]' : 'border-[#e5e7eb]'} bg-white`}
+          style={{ boxSizing: 'border-box' }}
+        >
+          {avatarSrc ? (
+            <img src={avatarSrc} alt="User" className="w-full h-full object-cover" />
+          ) : (
+            <svg width="20" height="20" viewBox="0 0 24 24" className={darkMode ? 'fill-[#9ca3af]' : 'fill-[#6b7280]'}>
+              <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/>
+            </svg>
+          )}
+        </div>
+      </div>
 
       {/* Logout */}
       <button

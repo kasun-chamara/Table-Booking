@@ -7,6 +7,7 @@ import Home from './pages/Home/Home';
 import Setting from './pages/Restaurant/Setting';
 import MealType from './pages/Restaurant/MealType';
 import CloseBooking from './pages/Restaurant/CloseBooking';
+import ComponentList from './components/ComponentList';
 
 function App() {
   return (
@@ -18,15 +19,17 @@ function App() {
 
 function RouterLayout() {
   const navigate = useNavigate();
+  const [darkMode, setDarkMode] = React.useState(false);
 
   return (
-    <MainLayout onNavigate={(page) => navigate(page)}>
+    <MainLayout onNavigate={(page) => navigate(page)} darkMode={darkMode} setDarkMode={setDarkMode}>
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/setting" element={<Setting />} />
-        <Route path="/mealtype" element={<MealType />} />
-        <Route path="/closebooking" element={<CloseBooking />} />
-        <Route path="*" element={<Home />} />
+        <Route path="/" element={<Home darkMode={darkMode} />} />
+        <Route path="/setting" element={<Setting darkMode={darkMode} />} />
+        <Route path="/mealtype" element={<MealType darkMode={darkMode} />} />
+        <Route path="/closebooking" element={<CloseBooking darkMode={darkMode} />} />
+        <Route path="/components" element={<ComponentList darkMode={darkMode} />} />
+        <Route path="*" element={<Home darkMode={darkMode} />} />
       </Routes>
     </MainLayout>
   );
