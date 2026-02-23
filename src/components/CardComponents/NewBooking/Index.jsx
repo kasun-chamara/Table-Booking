@@ -24,7 +24,7 @@ export default function NewBookingModal({ open, onClose, onBook, darkMode = fals
   const border = palette.border;
   const text = palette.foreground;
   const subtext = palette.subtext || (darkMode ? "#94a3b8" : "#64748b");
-  const headerBg = palette.headerBg || (darkMode ? "#1e2027" : "#f1f5f9");
+  const headerBg = palette.cardBg || (darkMode ? "#1e2027" : "#f1f5f9");
   const inputBg = palette.surface || (darkMode ? "#1e2027" : "#f8fafc");
   const placeholder = subtext;
   // Use reconfirmed color for green accent (same as Calendar)

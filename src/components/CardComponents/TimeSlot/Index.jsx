@@ -35,7 +35,6 @@ export default function TimeSlotBookingModal({
     };
   }, [open, onClose]);
 
-  // ✅ Conditional render AFTER hooks
   if (!open) return null;
 
   return createPortal(

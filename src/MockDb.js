@@ -1,3 +1,16 @@
+//BookingDetailsModal
+export const MOCK_BOOKING = {
+  customer: "Alex Johnson",
+  phone: "0045634567",
+  status: "reconfirmed",
+  date: "2026-01-19",
+  from: "5.00 PM",
+  to: "5.00 PM",
+  partySize: "06",
+  mealType: "Lunch",
+  table: "03",
+  avatarSrc: null,
+};
 
 // mock data for BookingTable 
 const MOCK_DATA = [

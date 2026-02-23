@@ -4,21 +4,21 @@ import { CiSearch, CiBoxList, CiViewTable } from "react-icons/ci";
 import theme from '../../../theme';
 import MOCK_DATA from '../../MockDb';
 import ReminderConfirmModal from '../CardComponents/ReminderCard/Index';
+import BookingDetailsModal from '../CardComponents/ClientDetails';
 
 const STATUS_CONFIG = {
   waitingList: { label: "Waiting List", bg: theme.status.waitingList, color: theme.text_light },
-  unallocated: { label: "Unallocated", bg: theme.status.unallocated, color: theme.text_light },
-  confirmed:   { label: "Confirmed",   bg: theme.status.confirmed, color: theme.text_light },
-  reconfirmed: { label: "Reconfirmed", bg: theme.status.reconfirmed, color: theme.text_light },
-  seated:      { label: "Seated",      bg: theme.status.seated, color: theme.text_light },
-  left:        { label: "Left",        bg: theme.status.left, color: theme.text_light },
-  noShow:      { label: "No Show",     bg: theme.status.noShow, color: theme.text_light },
-  cancelled:   { label: "Cancelled",   bg: theme.status.cancelled, color: theme.text_light },
+  unallocated: { label: "Unallocated",  bg: theme.status.unallocated, color: theme.text_light },
+  confirmed:   { label: "Confirmed",    bg: theme.status.confirmed,   color: theme.text_light },
+  reconfirmed: { label: "Reconfirmed",  bg: theme.status.reconfirmed, color: theme.text_light },
+  seated:      { label: "Seated",       bg: theme.status.seated,      color: theme.text_light },
+  left:        { label: "Left",         bg: theme.status.left,        color: theme.text_light },
+  noShow:      { label: "No Show",      bg: theme.status.noShow,      color: theme.text_light },
+  cancelled:   { label: "Cancelled",    bg: theme.status.cancelled,   color: theme.text_light },
 };
 
 const COLS = ["Table", "Customer", "Time", "PAX", "Notes", "Src", "Dep £", "Status", "Action"];
 
-// ✅ Moved OUTSIDE — accepts view/darkMode/text/subtext as props
 function ViewBtn({ id, Icon, label, currentView, darkMode, text, subtext, onSetView }) {
   return (
     <button
@@ -44,28 +44,35 @@ function ViewBtn({ id, Icon, label, currentView, darkMode, text, subtext, onSetV
 }
 
 export default function BookingTable({ darkMode = false }) {
-  const [view, setView]                   = useState("list");
-  const [search, setSearch]               = useState("");
-  const [selected, setSelected]           = useState([]);
-  const [reminderOpen, setReminderOpen]   = useState(false);
+  const [view, setView]               = useState("list");
+  const [search, setSearch]           = useState("");
+  const [selected, setSelected]       = useState([]);
+  const [reminderOpen, setReminderOpen] = useState(false);
+  // ✅ Moved here — was incorrectly inside JSX
+  const [detailsOpen, setDetailsOpen]   = useState(false);
+  const [selectedBooking, setSelectedBooking] = useState(null);
 
   const palette  = darkMode ? theme.dark : theme;
   const bg       = palette.cardBg;
-  const surface  = palette.surface || (darkMode ? "#1e2027" : "#f8fafc");
+  const surface  = palette.surface  || (darkMode ? "#1e2027" : "#f8fafc");
   const border   = palette.border;
   const text     = palette.foreground;
-  const subtext  = palette.subtext || (darkMode ? "#94a3b8" : "#64748b");
+  const subtext  = palette.subtext  || (darkMode ? "#94a3b8" : "#64748b");
   const headerBg = palette.headerBg || (darkMode ? "#1e2027" : "#f1f5f9");
-  const rowHover = palette.hoverBg || (darkMode ? "#1e2027" : "#f8faff");
+  const rowHover = palette.hoverBg  || (darkMode ? "#1e2027" : "#f8faff");
 
-  const filtered = MOCK_DATA.filter(r => {
-    return r.customer.toLowerCase().includes(search.toLowerCase());
-  });
+  const filtered = MOCK_DATA.filter(r =>
+    r.customer.toLowerCase().includes(search.toLowerCase())
+  );
 
   const toggleSelect = (id) =>
     setSelected(s => s.includes(id) ? s.filter(x => x !== id) : [...s, id]);
 
-  // Shared props passed down to ViewBtn
+  const handleViewDetails = (row) => {
+    setSelectedBooking(row);
+    setDetailsOpen(true);
+  };
+
   const viewBtnProps = { currentView: view, darkMode, text, subtext, onSetView: setView };
 
   return (
@@ -74,12 +81,8 @@ export default function BookingTable({ darkMode = false }) {
       {/* ── Toolbar ── */}
       <div style={{
         display: "flex", alignItems: "center", flexWrap: "wrap", gap: 10,
-        padding: "12px 16px",
-        borderBottom: `1px solid ${border}`,
-        background: surface,
+        padding: "12px 16px", borderBottom: `1px solid ${border}`, background: surface,
       }}>
-
-        {/* View switcher */}
         <div style={{
           display: "flex", alignItems: "center", gap: 2,
           background: darkMode ? "#1e2027" : "#f1f5f9",
@@ -90,7 +93,6 @@ export default function BookingTable({ darkMode = false }) {
           <ViewBtn id="table"    Icon={CiViewTable}   label="Table"    {...viewBtnProps} />
         </div>
 
-        {/* Search */}
         <div style={{
           flex: 1, minWidth: 160, maxWidth: 280,
           display: "flex", alignItems: "center", gap: 8,
@@ -102,20 +104,15 @@ export default function BookingTable({ darkMode = false }) {
             value={search}
             onChange={e => setSearch(e.target.value)}
             placeholder="Search..."
-            style={{
-              border: "none", outline: "none", background: "transparent",
-              fontSize: 13, color: text, width: "100%",
-            }}
+            style={{ border: "none", outline: "none", background: "transparent", fontSize: 13, color: text, width: "100%" }}
           />
         </div>
 
-        {/* Right actions */}
         <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 8 }}>
           {["Excel", "PDF"].map(btn => (
             <button key={btn} style={{
               padding: "6px 14px", borderRadius: 8, fontSize: 13, fontWeight: 500,
-              border: `1px solid ${border}`, background: "transparent",
-              color: text, cursor: "pointer",
+              border: `1px solid ${border}`, background: "transparent", color: text, cursor: "pointer",
             }}>{btn}</button>
           ))}
           <button style={{
@@ -129,35 +126,34 @@ export default function BookingTable({ darkMode = false }) {
       </div>
 
       {/* ── Action row ── */}
-      <div style={{
-        display: "flex", justifyContent: "flex-end", gap: 10,
-        padding: "10px 16px", borderBottom: `1px solid ${border}`,
-      }}>
+      <div style={{ display: "flex", justifyContent: "flex-end", gap: 10, padding: "10px 16px", borderBottom: `1px solid ${border}` }}>
+        <button style={{
+          padding: "6px 18px", borderRadius: 20, fontSize: 13, fontWeight: 600,
+          border: `1px solid #ef4444`, cursor: "pointer", background: "transparent",
+          color: "#ef4444", transition: "all 0.15s",
+        }}>Show Cancelled</button>
         <button
-          style={{
-            padding: "6px 18px", borderRadius: 20, fontSize: 13, fontWeight: 600,
-            border: `1px solid #ef4444`, cursor: "pointer",
-            background: "transparent",
-            color: "#ef4444",
-            transition: "all 0.15s",
-          }}
-        >Show Cancelled</button>
-        <button
-          style={{
-            padding: "6px 18px", borderRadius: 20, fontSize: 13, fontWeight: 600,
-            border: `1px solid ${border}`, background: "transparent",
-            color: text, cursor: "pointer",
-          }}
           onClick={() => setReminderOpen(true)}
+          style={{
+            padding: "6px 18px", borderRadius: 20, fontSize: 13, fontWeight: 600,
+            border: `1px solid ${border}`, background: "transparent", color: text, cursor: "pointer",
+          }}
         >Reminder</button>
       </div>
 
-      {/* Reminder Modal */}
+      {/* ── Modals ── */}
       <ReminderConfirmModal
         open={reminderOpen}
         onClose={() => setReminderOpen(false)}
         onConfirm={() => setReminderOpen(false)}
         isDarkMode={darkMode}
+      />
+      <BookingDetailsModal
+        open={detailsOpen}
+        onClose={() => setDetailsOpen(false)}
+        onSave={(data) => console.log(data)}
+        booking={selectedBooking}
+        darkMode={darkMode}
       />
 
       {/* ── Table ── */}
@@ -195,12 +191,11 @@ export default function BookingTable({ darkMode = false }) {
                 >
                   {/* Table badges */}
                   <td style={{ padding: "10px 14px", textAlign: "center", verticalAlign: "middle" }}>
-                    <div style={{ display: "flex", gap: 4, alignItems: "center", justifyContent: "center", height: "100%" }}>
+                    <div style={{ display: "flex", gap: 4, alignItems: "center", justifyContent: "center" }}>
                       {row.tables.map(t => (
                         <span key={t} style={{
                           background: "#22c55e", color: "#fff",
-                          borderRadius: 6, padding: "2px 7px",
-                          fontWeight: 700, fontSize: 12,
+                          borderRadius: 6, padding: "2px 7px", fontWeight: 700, fontSize: 12,
                         }}>{t}</span>
                       ))}
                     </div>
@@ -208,11 +203,9 @@ export default function BookingTable({ darkMode = false }) {
 
                   {/* Customer */}
                   <td style={{ padding: "10px 14px", textAlign: "center", verticalAlign: "middle" }}>
-                    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", height: "100%" }}>
-                      <div style={{ fontWeight: 600, color: text }}>{row.customer}</div>
-                      <div style={{ color: subtext, fontSize: 11, marginTop: 1, display: "flex", alignItems: "center", gap: 4 }}>
-                        <IoCallOutline /> {row.phone}
-                      </div>
+                    <div style={{ fontWeight: 600, color: text }}>{row.customer}</div>
+                    <div style={{ color: subtext, fontSize: 11, marginTop: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 4 }}>
+                      <IoCallOutline /> {row.phone}
                     </div>
                   </td>
 
@@ -228,9 +221,7 @@ export default function BookingTable({ darkMode = false }) {
 
                   {/* Notes */}
                   <td style={{ padding: "10px 14px", textAlign: "center", verticalAlign: "middle" }}>
-                    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%" }}>
-                      <IoDocumentAttachOutline style={{ color: subtext, fontSize: 18 }} />
-                    </div>
+                    <IoDocumentAttachOutline style={{ color: subtext, fontSize: 18 }} />
                   </td>
 
                   {/* Src */}
@@ -254,13 +245,17 @@ export default function BookingTable({ darkMode = false }) {
 
                   {/* Action */}
                   <td style={{ padding: "10px 14px", textAlign: "center", verticalAlign: "middle" }}>
-                    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, height: "100%" }}>
-                      <button style={{
-                        background: "transparent", border: `1px solid ${border}`,
-                        borderRadius: 8, padding: "4px 8px", cursor: "pointer",
-                        color: subtext, fontSize: 18,
-                        display: "flex", alignItems: "center", justifyContent: "center"
-                      }}>
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
+                      {/* ✅ Eye button now opens BookingDetailsModal */}
+                      <button
+                        onClick={() => handleViewDetails(row)}
+                        style={{
+                          background: "transparent", border: `1px solid ${border}`,
+                          borderRadius: 8, padding: "4px 8px", cursor: "pointer",
+                          color: subtext, fontSize: 18,
+                          display: "flex", alignItems: "center", justifyContent: "center",
+                        }}
+                      >
                         <IoEyeOutline />
                       </button>
                       <input

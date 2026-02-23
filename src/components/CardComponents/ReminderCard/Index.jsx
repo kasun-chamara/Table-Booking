@@ -16,10 +16,11 @@ export default function ReminderConfirmModal({
   return createPortal(
     <div className="fixed inset-0 z-[999999] flex items-center justify-center bg-black/60">
       <div
-        className="w-full max-w-2xl rounded-2xl p-6 shadow-xl"
+        className="w-full max-w-2xl rounded-2xl p-6 shadow-xl border"
         style={{
           background: palette.cardBg,
-          color: palette.foreground
+          color: palette.foreground,
+          borderColor: palette.border
         }}
       >
         <div className="flex gap-3 items-start">
@@ -37,7 +38,7 @@ export default function ReminderConfirmModal({
           </h2>
         </div>
 
-        <p className="mt-4 text-sm sm:text-base">
+        <p className="mt-4 text-sm sm:text-base ml-13">
           This action will add the selected bookings to the reminder queue and
           the status will be updated once the reminder queue is completed.
         </p>
@@ -50,22 +51,38 @@ export default function ReminderConfirmModal({
         <div className="flex justify-end gap-3">
           <button
             onClick={onClose}
-            className="rounded-xl border-1 px-4 py-2 font-semibold"
             style={{
-              borderColor: palette.status.noShow,
-              color: palette.status.noShow
+              borderRadius: '0.75rem',
+              border: `1px solid ${palette.status.noShow}`,
+              color: palette.status.noShow,
+              background: 'transparent',
+              padding: '8px 16px',
+              fontWeight: 600,
+              fontSize: 16,
+              transition: 'all 0.15s',
+              cursor: 'pointer',
             }}
+            onMouseOver={e => { e.currentTarget.style.background = palette.status.noShow; e.currentTarget.style.color = '#fff'; }}
+            onMouseOut={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = palette.status.noShow; }}
           >
             Cancel
           </button>
 
           <button
             onClick={onConfirm}
-            className="rounded-xl px-4 py-2 font-semibold"
             style={{
+              borderRadius: '0.75rem',
               background: palette.status.reconfirmed,
-              color: palette.text_light
+              color: palette.text_light,
+              border: 'none',
+              padding: '8px 16px',
+              fontWeight: 600,
+              fontSize: 16,
+              transition: 'all 0.15s',
+              cursor: 'pointer',
             }}
+            onMouseOver={e => { e.currentTarget.style.background = '#16a34a'; }}
+            onMouseOut={e => { e.currentTarget.style.background = palette.status.reconfirmed; }}
           >
             Yes Continue
           </button>
