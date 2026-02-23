@@ -24,6 +24,7 @@ export default function NewBookingModal({ open, onClose, onBook, darkMode = fals
   const border = palette.border;
   const text = palette.foreground;
   const subtext = palette.subtext || (darkMode ? "#94a3b8" : "#64748b");
+  const reminderColor = palette.status.reconfirmed;
   const headerBg = palette.cardBg || (darkMode ? "#1e2027" : "#f1f5f9");
   const inputBg = palette.surface || (darkMode ? "#1e2027" : "#f8fafc");
   const placeholder = subtext;
@@ -101,7 +102,7 @@ export default function NewBookingModal({ open, onClose, onBook, darkMode = fals
               <div className="p-6 border-b md:border-b-0 md:border-r"
                 style={{ borderColor: border }}
               >
-                <p className="font-bold text-base mb-4" style={{ color: text }}>
+                <p className="font-bold text-base mb-4" style={{ color: palette.foreground }}>
                   Select Date
                 </p>
                 <Calendar
@@ -113,14 +114,14 @@ export default function NewBookingModal({ open, onClose, onBook, darkMode = fals
 
               {/* Right — Form */}
               <div className="p-6 flex flex-col gap-5">
-                <p className="font-semibold text-sm" style={{ color: subtext }}>
+                <p className="font-semibold text-sm" style={{ color: reminderColor }}>
                   Add a new reservation quickly and easily
                 </p>
 
                 {/* Party Size + Duration */}
                 <div className="grid grid-cols-2 gap-4">
                   <div className="flex flex-col gap-2">
-                    <label className="text-sm font-semibold" style={{ color: text }}>
+                    <label className="text-sm font-semibold" style={{ color: palette.foreground }}>
                       Party Size
                     </label>
                     <div className="relative">
@@ -143,7 +144,7 @@ export default function NewBookingModal({ open, onClose, onBook, darkMode = fals
                   </div>
 
                   <div className="flex flex-col gap-2">
-                    <label className="text-sm font-semibold" style={{ color: text }}>
+                    <label className="text-sm font-semibold" style={{ color: palette.foreground }}>
                       Booking Duration
                     </label>
                     <div className="relative">
@@ -171,7 +172,7 @@ export default function NewBookingModal({ open, onClose, onBook, darkMode = fals
 
                 {/* Meal Type */}
                 <div className="flex flex-col gap-2">
-                  <label className="text-sm font-semibold" style={{ color: text }}>
+                  <label className="text-sm font-semibold" style={{ color: palette.foreground }}>
                     Meal Type
                   </label>
                   <div className="relative">

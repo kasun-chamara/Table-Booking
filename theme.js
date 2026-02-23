@@ -37,6 +37,7 @@ const theme = {
 	cardBg: '#FFFFFF', // light mode card background
 	border: '#E4E6EB', // light mode border
 	secondary: '#F2F4F5', // light mode secondary/muted
+	surface: '#f8fafc', // light mode surface
 
 
     
@@ -74,6 +75,7 @@ const theme = {
 		cardBg: '#32363E', // dark mode card background
 		border: '#434850', // dark mode border
 		secondary: '#434850', // dark mode secondary/muted
+		surface: '#23272f', // dark mode surface
 	},
 };
 

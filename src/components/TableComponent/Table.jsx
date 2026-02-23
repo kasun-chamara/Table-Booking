@@ -246,12 +246,12 @@ export default function BookingTable({ darkMode = false }) {
                   {/* Action */}
                   <td style={{ padding: "10px 14px", textAlign: "center", verticalAlign: "middle" }}>
                     <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
-                      {/* ✅ Eye button now opens BookingDetailsModal */}
+                      
                       <button
                         onClick={() => handleViewDetails(row)}
                         style={{
                           background: "transparent", border: `1px solid ${border}`,
-                          borderRadius: 8, padding: "4px 8px", cursor: "pointer",
+                          borderRadius: 8, padding: "4px 4px", cursor: "pointer",
                           color: subtext, fontSize: 18,
                           display: "flex", alignItems: "center", justifyContent: "center",
                         }}

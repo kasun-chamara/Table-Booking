@@ -7,7 +7,10 @@ import Home from './pages/Home/Home';
 import Setting from './pages/Restaurant/Setting';
 import MealType from './pages/Restaurant/MealType';
 import CloseBooking from './pages/Restaurant/CloseBooking';
+
 import ComponentList from './components/ComponentList';
+import CustomersPage from './pages/Customers/Index';
+import WidgetSettings from './pages/WidgetSettings/Index';
 
 function App() {
   return (
@@ -29,6 +32,8 @@ function RouterLayout() {
         <Route path="/mealtype" element={<MealType darkMode={darkMode} />} />
         <Route path="/closebooking" element={<CloseBooking darkMode={darkMode} />} />
         <Route path="/components" element={<ComponentList darkMode={darkMode} />} />
+        <Route path="/customers" element={<CustomersPage darkMode={darkMode} setDarkMode={setDarkMode} />} />
+        <Route path="/widget" element={<WidgetSettings darkMode={darkMode} setDarkMode={setDarkMode} />} />
         <Route path="*" element={<Home darkMode={darkMode} />} />
       </Routes>
     </MainLayout>

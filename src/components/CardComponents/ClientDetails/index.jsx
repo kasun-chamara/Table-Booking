@@ -70,6 +70,7 @@ export default function BookingDetailsModal({ open, onClose, onSave, booking = M
   const inputBorder = palette.border;
   const inputText = palette.foreground;
   const subtextCol = palette.subtext || (darkMode ? "#94a3b8" : "#64748b");
+  const labelCol = palette.foreground;
   const dividerCol = darkMode ? "border-[#2e2e45]" : "border-[#e2e8f0]";
 
   const selectStyle = { background: inputBg, borderColor: inputBorder, color: inputText };
@@ -154,7 +155,7 @@ export default function BookingDetailsModal({ open, onClose, onSave, booking = M
 
             {/* ✅ Date Picker — replaces read-only text */}
             <div className="flex flex-col gap-2 mb-3">
-              <label className="text-sm font-semibold" style={{ color: subtextCol }}>Date</label>
+              <label className="text-sm font-semibold" style={{ color: labelCol }}>Date</label>
               <input
                 type="date"
                 value={date}
@@ -173,7 +174,7 @@ export default function BookingDetailsModal({ open, onClose, onSave, booking = M
             <div className="grid grid-cols-2 gap-4 mb-3">
               {/* From */}
               <div className="flex flex-col gap-2">
-                <label className="text-sm font-semibold" style={{ color: subtextCol }}>From</label>
+                <label className="text-sm font-semibold" style={{ color: labelCol }}>From</label>
                 <div className="relative">
                   <select value={from} onChange={e => setFrom(e.target.value)} className={selectClass} style={selectStyle}>
                     {TIME_SLOTS.map(t => <option key={t} value={t}>{t}</option>)}
@@ -183,7 +184,7 @@ export default function BookingDetailsModal({ open, onClose, onSave, booking = M
               </div>
               {/* To */}
               <div className="flex flex-col gap-2">
-                <label className="text-sm font-semibold" style={{ color: subtextCol }}>To</label>
+                <label className="text-sm font-semibold" style={{ color: labelCol }}>To</label>
                 <div className="relative">
                   <select value={to} onChange={e => setTo(e.target.value)} className={selectClass} style={selectStyle}>
                     {TIME_SLOTS.map(t => <option key={t} value={t}>{t}</option>)}
@@ -193,7 +194,7 @@ export default function BookingDetailsModal({ open, onClose, onSave, booking = M
               </div>
               {/* Party Size */}
               <div className="flex flex-col gap-2">
-                <label className="text-sm font-semibold" style={{ color: subtextCol }}>Party Size</label>
+                <label className="text-sm font-semibold" style={{ color: labelCol }}>Party Size</label>
                 <div className="relative">
                   <select value={partySize} onChange={e => setPartySize(e.target.value)} className={selectClass} style={selectStyle}>
                     {[...Array(20)].map((_, i) => {
@@ -206,7 +207,7 @@ export default function BookingDetailsModal({ open, onClose, onSave, booking = M
               </div>
               {/* Meal Type */}
               <div className="flex flex-col gap-2">
-                <label className="text-sm font-semibold" style={{ color: subtextCol }}>Meal Type</label>
+                <label className="text-sm font-semibold" style={{ color: labelCol }}>Meal Type</label>
                 <div className="relative">
                   <select value={mealType} onChange={e => setMealType(e.target.value)} className={selectClass} style={selectStyle}>
                     {MEAL_TYPES.map(m => <option key={m} value={m}>{m}</option>)}
@@ -226,7 +227,7 @@ export default function BookingDetailsModal({ open, onClose, onSave, booking = M
 
           {/* ── Special Requirements ── */}
           <div className="flex flex-col gap-2">
-            <label className={`text-sm font-semibold ${darkMode ? "text-slate-200" : "text-slate-700"}`}>
+            <label className="text-sm font-semibold" style={{ color: labelCol }}>
               Client Special Requirements
             </label>
             <textarea
@@ -244,7 +245,7 @@ export default function BookingDetailsModal({ open, onClose, onSave, booking = M
 
           {/* ── Internal Notes ── */}
           <div className={`flex flex-col gap-2 pb-5 border-b ${dividerCol}`} style={{ borderColor: inputBorder }}>
-            <label className={`text-sm font-semibold ${darkMode ? "text-slate-200" : "text-slate-700"}`}>
+            <label className="text-sm font-semibold" style={{ color: labelCol }}>
               Internal Notes
             </label>
             <textarea
