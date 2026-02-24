@@ -5,6 +5,7 @@ import theme from "../../../../theme";
 import { TbListDetails } from "react-icons/tb";
 import { MdCall } from "react-icons/md";
 import { CiMail } from "react-icons/ci";
+import BookingModal from "../AllocatedTables/Index";
 
 const STATUS_CONFIG = {
   waitingList: { label: "Waiting List", bg: theme.status.waitingList, color: theme.text_light },
@@ -34,7 +35,6 @@ function generateTimeSlots() {
 
 const TIME_SLOTS = generateTimeSlots();
 
-// ✅ Outside component
 function Caret({ subtextCol }) {
   return (
     <span
@@ -53,6 +53,9 @@ export default function BookingDetailsModal({ open, onClose, onSave, booking = M
   const [mealType, setMealType]           = useState(booking?.mealType  || "Lunch");
   // ✅ New — date picker state
   const [date, setDate]                   = useState(booking?.date      || new Date().toISOString().split("T")[0]);
+
+  // AllocatedTables modal state
+  const [showAllocatedModal, setShowAllocatedModal] = useState(false);
 
   if (!open) return null;
 
@@ -220,10 +223,28 @@ export default function BookingDetailsModal({ open, onClose, onSave, booking = M
 
           {/* ── Table ── */}
           <div className={`pb-5 border-b text-center ${dividerCol}`} style={{ borderColor: inputBorder }}>
-            <p className={`text-lg font-bold ${darkMode ? "text-slate-100" : "text-slate-800"}`}>
-              Table - {booking?.table}
-            </p>
+            <button
+              className="text-sm px-2 py-1 rounded-xl border transition-all"
+              style={{
+                cursor: "pointer",
+                background: STATUS_CONFIG.reconfirmed.bg,
+                color: theme.text_light,
+                borderColor: STATUS_CONFIG.reconfirmed.bg,
+                fontWeight: 500
+              }}
+              onClick={() => setShowAllocatedModal(true)}
+            >
+              Set Table{booking?.table ? ` - ${booking.table}` : ""}
+            </button>
           </div>
+
+          {/* AllocatedTables Modal */}
+          {showAllocatedModal && (
+            <BookingModal
+              // Add props as needed for table allocation
+              onClose={() => setShowAllocatedModal(false)}
+            />
+          )}
 
           {/* ── Special Requirements ── */}
           <div className="flex flex-col gap-2">
