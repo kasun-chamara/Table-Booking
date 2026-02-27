@@ -224,13 +224,14 @@ export default function BookingDetailsModal({ open, onClose, onSave, booking = M
           {/* ── Table ── */}
           <div className={`pb-5 border-b text-center ${dividerCol}`} style={{ borderColor: inputBorder }}>
             <button
-              className="text-sm px-2 py-1 rounded-xl border transition-all"
+              className="text-sm px-2 py-1  border transition-all"
               style={{
                 cursor: "pointer",
                 background: STATUS_CONFIG.reconfirmed.bg,
                 color: theme.text_light,
                 borderColor: STATUS_CONFIG.reconfirmed.bg,
-                fontWeight: 500
+                fontWeight: 500,
+                borderRadius: "0.3rem",
               }}
               onClick={() => setShowAllocatedModal(true)}
             >

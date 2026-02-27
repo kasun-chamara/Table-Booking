@@ -1,3 +1,37 @@
+export const DAYS = [
+  "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"
+];
+
+export const DURATION_OPTIONS = [
+  "15 Min", "30 Min", "45 Min", "1 Hour", "1.5 Hours", "2 Hours",
+  "30 Min after end", "1 Hour after end",
+];
+
+export const BOOKING_UNTIL_OPTIONS = [
+  "Booking allowed until closing",
+  "30 Min before closing",
+  "1 Hour before closing",
+  "2 Hours before closing",
+];
+
+export const CUTOFF_OPTIONS = [
+  "Immediately", "15 Min after end", "30 Min after end",
+  "1 Hour after end", "2 Hours after end",
+];
+// Mock date and time arrays for SuspendedBookingSlots
+export const MOCK_DATES = [
+  "2020-10-23", "2020-10-24", "2020-10-25", "2020-10-26",
+  "2020-10-27", "2020-10-28", "2020-10-29", "2020-10-30",
+];
+
+export const MOCK_TIMES = [
+  "00:00","00:30","01:00","01:30","02:00","02:30","03:00","03:30",
+  "04:00","04:30","05:00","05:30","06:00","06:30","07:00","07:30",
+  "08:00","08:30","09:00","09:30","10:00","10:30","11:00","11:30",
+  "12:00","12:30","13:00","13:30","14:00","14:30","15:00","15:30",
+  "16:00","16:30","17:00","17:30","18:00","18:30","19:00","19:30",
+  "20:00","20:30","21:00","21:30","22:00","22:30","23:00","23:30",
+];
 //BookingDetailsModal
 export const MOCK_BOOKING = {
   customer: "Alex Johnson",

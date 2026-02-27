@@ -13,9 +13,11 @@ const theme = {
 		dark: '#1e40af', // blue-800
 
 		//Green
-        	green_100: '#E6F7F0', // green-100 for reconfirmed status bg
+		    green_50: '#CEFFE3', // lightest green for light mode backgrounds
+			green_100: '#E6F7F0', // green-100 for reconfirmed status bg
 			green_200: '#C8E6C9', // green-200 for other green status bg
 			green_300: '#A8E6C9', // green-300 for other green status bg
+			green_500: '#00B34D', // green-500 strong green
 
             noShow_100: '#FEE2E2', // lightest red
 		    noShow_200: '#FCA5A5', // medium red
