@@ -5,6 +5,8 @@ import theme from '../../../theme';
 import MOCK_DATA from '../../MockDb';
 import ReminderConfirmModal from '../CardComponents/ReminderCard/Index';
 import BookingDetailsModal from '../CardComponents/ClientDetails';
+import ReservationTimeline from "../TimeLine/TimeLine";
+
 
 const STATUS_CONFIG = {
   waitingList: { label: "Waiting List", bg: theme.status.waitingList, color: theme.text_light },
@@ -48,7 +50,6 @@ export default function BookingTable({ darkMode = false }) {
   const [search, setSearch]           = useState("");
   const [selected, setSelected]       = useState([]);
   const [reminderOpen, setReminderOpen] = useState(false);
-  // ✅ Moved here — was incorrectly inside JSX
   const [detailsOpen, setDetailsOpen]   = useState(false);
   const [selectedBooking, setSelectedBooking] = useState(null);
 
@@ -156,128 +157,111 @@ export default function BookingTable({ darkMode = false }) {
         darkMode={darkMode}
       />
 
-      {/* ── Table ── */}
-      <div style={{ overflowX: "auto" }}>
-        <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
-          <thead>
-            <tr style={{ background: headerBg }}>
-              {COLS.map(col => (
-                <th key={col} style={{
-                  padding: "10px 14px", textAlign: "center", verticalAlign: "middle",
-                  fontWeight: 600, color: subtext, fontSize: 12,
-                  borderBottom: `1px solid ${border}`, whiteSpace: "nowrap",
-                }}>{col}</th>
-              ))}
-            </tr>
-          </thead>
+      {/* ── Timeline View ── */}
+      {view === "timeline" && (
+        <div style={{ padding: "1rem" }}>
+          <ReservationTimeline darkMode={darkMode} />
+        </div>
+      )}
 
-          <tbody>
-            {filtered.map((row, i) => {
-              const st         = STATUS_CONFIG[row.status] || STATUS_CONFIG.confirmed;
-              const isSelected = selected.includes(row.id);
-              return (
-                <tr
-                  key={row.id}
-                  style={{
-                    borderBottom: `1px solid ${border}`,
-                    background: isSelected
-                      ? (darkMode ? theme.dark.primary.green_100 : theme.primary.green_100)
-                      : i % 2 === 0 ? bg : surface,
-                    transition: "background 0.12s",
-                    cursor: "default",
-                  }}
-                  onMouseEnter={e => { if (!isSelected) e.currentTarget.style.background = rowHover; }}
-                  onMouseLeave={e => { e.currentTarget.style.background = isSelected ? (darkMode ? theme.dark.primary.green_100 : theme.primary.green_100) : (i % 2 === 0 ? bg : surface); }}
-                >
-                  {/* Table badges */}
-                  <td style={{ padding: "10px 14px", textAlign: "center", verticalAlign: "middle" }}>
-                    <div style={{ display: "flex", gap: 4, alignItems: "center", justifyContent: "center" }}>
-                      {row.tables.map(t => (
-                        <span key={t} style={{
-                          background: "#22c55e", color: "#fff",
-                          borderRadius: 6, padding: "2px 7px", fontWeight: 700, fontSize: 12,
-                        }}>{t}</span>
-                      ))}
-                    </div>
-                  </td>
+      {/* ── List / Table View ── */}
+      {view !== "timeline" && (
+        <div style={{ overflowX: "auto" }}>
+          <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
+            <thead>
+              <tr style={{ background: headerBg }}>
+                {COLS.map(col => (
+                  <th key={col} style={{
+                    padding: "10px 14px", textAlign: "center", verticalAlign: "middle",
+                    fontWeight: 600, color: subtext, fontSize: 12,
+                    borderBottom: `1px solid ${border}`, whiteSpace: "nowrap",
+                  }}>{col}</th>
+                ))}
+              </tr>
+            </thead>
 
-                  {/* Customer */}
-                  <td style={{ padding: "10px 14px", textAlign: "center", verticalAlign: "middle" }}>
-                    <div style={{ fontWeight: 600, color: text }}>{row.customer}</div>
-                    <div style={{ color: subtext, fontSize: 11, marginTop: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 4 }}>
-                      <IoCallOutline /> {row.phone}
-                    </div>
-                  </td>
+            <tbody>
+              {filtered.map((row, i) => {
+                const st         = STATUS_CONFIG[row.status] || STATUS_CONFIG.confirmed;
+                const isSelected = selected.includes(row.id);
+                return (
+                  <tr
+                    key={row.id}
+                    style={{
+                      borderBottom: `1px solid ${border}`,
+                      background: isSelected
+                        ? (darkMode ? theme.dark.primary.green_100 : theme.primary.green_100)
+                        : i % 2 === 0 ? bg : surface,
+                      transition: "background 0.12s",
+                      cursor: "default",
+                    }}
+                    onMouseEnter={e => { if (!isSelected) e.currentTarget.style.background = rowHover; }}
+                    onMouseLeave={e => { e.currentTarget.style.background = isSelected ? (darkMode ? theme.dark.primary.green_100 : theme.primary.green_100) : (i % 2 === 0 ? bg : surface); }}
+                  >
+                    <td style={{ padding: "10px 14px", textAlign: "center", verticalAlign: "middle" }}>
+                      <div style={{ display: "flex", gap: 4, alignItems: "center", justifyContent: "center" }}>
+                        {row.tables.map(t => (
+                          <span key={t} style={{
+                            background: "#22c55e", color: "#fff",
+                            borderRadius: 6, padding: "2px 7px", fontWeight: 700, fontSize: 12,
+                          }}>{t}</span>
+                        ))}
+                      </div>
+                    </td>
+                    <td style={{ padding: "10px 14px", textAlign: "center", verticalAlign: "middle" }}>
+                      <div style={{ fontWeight: 600, color: text }}>{row.customer}</div>
+                      <div style={{ color: subtext, fontSize: 11, marginTop: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 4 }}>
+                        <IoCallOutline /> {row.phone}
+                      </div>
+                    </td>
+                    <td style={{ padding: "10px 14px", color: text, whiteSpace: "nowrap", textAlign: "center" }}>{row.time}</td>
+                    <td style={{ padding: "10px 14px", color: text, textAlign: "center" }}>{row.pax}</td>
+                    <td style={{ padding: "10px 14px", textAlign: "center", verticalAlign: "middle" }}>
+                      <IoDocumentAttachOutline style={{ color: subtext, fontSize: 18 }} />
+                    </td>
+                    <td style={{ padding: "10px 14px", color: text, fontWeight: 600, textAlign: "center" }}>{row.src}</td>
+                    <td style={{ padding: "10px 14px", color: text, fontWeight: 500, textAlign: "center" }}>£ {row.dep.toFixed(2)}</td>
+                    <td style={{ padding: "10px 14px", textAlign: "center" }}>
+                      <span style={{
+                        background: st.bg, color: st.color,
+                        borderRadius: 20, padding: "4px 14px",
+                        fontWeight: 600, fontSize: 12, whiteSpace: "nowrap",
+                      }}>{st.label}</span>
+                    </td>
+                    <td style={{ padding: "10px 14px", textAlign: "center", verticalAlign: "middle" }}>
+                      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
+                        <button
+                          onClick={() => handleViewDetails(row)}
+                          style={{
+                            background: "transparent", border: `1px solid ${border}`,
+                            borderRadius: 8, padding: "4px 4px", cursor: "pointer",
+                            color: subtext, fontSize: 18,
+                            display: "flex", alignItems: "center", justifyContent: "center",
+                          }}
+                        >
+                          <IoEyeOutline />
+                        </button>
+                        <input
+                          type="checkbox"
+                          checked={isSelected}
+                          onChange={() => toggleSelect(row.id)}
+                          style={{ width: 16, height: 16, cursor: "pointer", accentColor: "#22c55e" }}
+                        />
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
 
-                  {/* Time */}
-                  <td style={{ padding: "10px 14px", color: text, whiteSpace: "nowrap", textAlign: "center" }}>
-                    {row.time}
-                  </td>
-
-                  {/* PAX */}
-                  <td style={{ padding: "10px 14px", color: text, textAlign: "center" }}>
-                    {row.pax}
-                  </td>
-
-                  {/* Notes */}
-                  <td style={{ padding: "10px 14px", textAlign: "center", verticalAlign: "middle" }}>
-                    <IoDocumentAttachOutline style={{ color: subtext, fontSize: 18 }} />
-                  </td>
-
-                  {/* Src */}
-                  <td style={{ padding: "10px 14px", color: text, fontWeight: 600, textAlign: "center" }}>
-                    {row.src}
-                  </td>
-
-                  {/* Dep */}
-                  <td style={{ padding: "10px 14px", color: text, fontWeight: 500, textAlign: "center" }}>
-                    £ {row.dep.toFixed(2)}
-                  </td>
-
-                  {/* Status */}
-                  <td style={{ padding: "10px 14px", textAlign: "center" }}>
-                    <span style={{
-                      background: st.bg, color: st.color,
-                      borderRadius: 20, padding: "4px 14px",
-                      fontWeight: 600, fontSize: 12, whiteSpace: "nowrap",
-                    }}>{st.label}</span>
-                  </td>
-
-                  {/* Action */}
-                  <td style={{ padding: "10px 14px", textAlign: "center", verticalAlign: "middle" }}>
-                    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
-                      
-                      <button
-                        onClick={() => handleViewDetails(row)}
-                        style={{
-                          background: "transparent", border: `1px solid ${border}`,
-                          borderRadius: 8, padding: "4px 4px", cursor: "pointer",
-                          color: subtext, fontSize: 18,
-                          display: "flex", alignItems: "center", justifyContent: "center",
-                        }}
-                      >
-                        <IoEyeOutline />
-                      </button>
-                      <input
-                        type="checkbox"
-                        checked={isSelected}
-                        onChange={() => toggleSelect(row.id)}
-                        style={{ width: 16, height: 16, cursor: "pointer", accentColor: "#22c55e" }}
-                      />
-                    </div>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-
-        {filtered.length === 0 && (
-          <div style={{ textAlign: "center", padding: 40, color: subtext }}>
-            No bookings found.
-          </div>
-        )}
-      </div>
+          {filtered.length === 0 && (
+            <div style={{ textAlign: "center", padding: 40, color: subtext }}>
+              No bookings found.
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }

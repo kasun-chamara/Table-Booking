@@ -64,7 +64,7 @@ export default function SidebarNav({
       { id: "tablegroup", label: "Table Group",  icon: MdGroup },
       { id: "timeline",   label: "Timeline",     icon: MdTimeline },
     ] },
-    { id: "components", label: "Components", icon: MdWidgets },
+    // { id: "components", label: "Components", icon: MdWidgets },
   ];
 
   const ROUTE_MAP = {
@@ -80,7 +80,15 @@ export default function SidebarNav({
     timeline:     "/timeline",
   };
 
+  // Items that should only toggle submenu, never navigate
+  const SUBMENU_ONLY = ["resturant", "tables"];
+
   const handleNav = (id) => {
+    if (SUBMENU_ONLY.includes(id)) {
+      // Toggle open/close the submenu without navigating
+      setActive(prev => prev === id ? null : id);
+      return;
+    }
     setActive(id);
     setSubMenuActive(null);
     onNavigate?.(ROUTE_MAP[id] ?? "/");

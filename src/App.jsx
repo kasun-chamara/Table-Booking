@@ -11,6 +11,9 @@ import CloseBooking from './pages/Restaurant/CloseBooking';
 import ComponentList from './components/ComponentList';
 import CustomersPage from './pages/Customers/Index';
 import WidgetSettings from './pages/WidgetSettings/Index';
+import AddTable from './pages/Table/AddTable';
+import TableGroups from './pages/Table/TableGroups';
+import Timline from './pages/Table/Timline';
 
 function App() {
   return (
@@ -31,9 +34,12 @@ function RouterLayout() {
         <Route path="/setting" element={<Setting darkMode={darkMode} />} />
         <Route path="/mealtype" element={<MealType darkMode={darkMode} />} />
         <Route path="/closebooking" element={<CloseBooking darkMode={darkMode} />} />
-        <Route path="/components" element={<ComponentList darkMode={darkMode} />} />
+        {/* <Route path="/components" element={<ComponentList darkMode={darkMode} />} /> */}
         <Route path="/customers" element={<CustomersPage darkMode={darkMode} setDarkMode={setDarkMode} />} />
         <Route path="/widget" element={<WidgetSettings darkMode={darkMode} setDarkMode={setDarkMode} />} />
+        <Route path="/table" element={<AddTable darkMode={darkMode} />} />
+        <Route path="/tablegroup" element={<TableGroups darkMode={darkMode} />} />
+        <Route path="/timeline" element={<Timline darkMode={darkMode} />} />
         <Route path="*" element={<Home darkMode={darkMode} />} />
       </Routes>
     </MainLayout>
